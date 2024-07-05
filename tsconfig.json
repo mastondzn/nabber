@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022"],
+        "rootDirs": ["src", "tests"],
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "declaration": true,
+        "declarationMap": true,
+        "emitDeclarationOnly": true,
+        "outDir": "dist",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*.ts", "tests/**/*.ts"]
+}

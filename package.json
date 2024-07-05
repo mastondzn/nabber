@@ -1,0 +1,63 @@
+{
+    "name": "nabber",
+    "type": "module",
+    "version": "0.0.1",
+    "packageManager": "pnpm@9.1.2",
+    "description": "Small and ergonomic HTTP client that wraps the Fetch API.",
+    "author": "Maston (https://github.com/mastondzn)",
+    "license": "MIT",
+    "homepage": "https://github.com/mastondzn/nabber#readme",
+    "repository": "https://github.com/mastondzn/nabber",
+    "bugs": {
+        "url": "https://github.com/mastondzn/nabber/issues"
+    },
+    "keywords": [
+        "fetch",
+        "request",
+        "response",
+        "http"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    },
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs",
+            "default": "./dist/index.js"
+        }
+    },
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "src"
+    ],
+    "scripts": {
+        "build": "rimraf ./dist && rollup -c",
+        "lint": "eslint .",
+        "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+        "format": "prettier . --write !pnpm-lock.yaml",
+        "format:check": "prettier --check . !pnpm-lock.yaml",
+        "test": "vitest",
+        "release": "bumpp",
+        "clean": "rimraf --glob ./dist ./coverage"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@mastondzn/eslint": "^0.10.0",
+        "@rollup/plugin-typescript": "^11.1.6",
+        "@types/node": "^20.14.9",
+        "@vitest/coverage-v8": "^1.2.2",
+        "bumpp": "^9.3.0",
+        "eslint": "^8.57.0",
+        "prettier": "^3.3.2",
+        "rimraf": "^5.0.7",
+        "rollup": "^4.18.0",
+        "tslib": "^2.6.2",
+        "typescript": "^5.4.2",
+        "vitest": "^1.6.0"
+    }
+}
