@@ -1,6 +1,6 @@
 # Netter
 
-Netter is a small and ergonomic HTTP client that wraps the Fetch API, providing a more convenient interface for making HTTP requests.
+Netter is a small (~2kB) and ergonomic HTTP client that wraps the Fetch API, providing a more convenient interface for making HTTP requests.
 
 ## Installation
 
