@@ -1,7 +1,7 @@
 {
     "name": "netter",
     "type": "module",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "packageManager": "pnpm@9.1.2",
     "description": "Small and ergonomic HTTP client that wraps the Fetch API.",
     "author": "Maston (https://github.com/mastondzn)",
