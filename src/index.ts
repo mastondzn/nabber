@@ -1,6 +1,5 @@
 import { methods } from './constants';
 import { decoratePromise, decorateResponse } from './decorators';
-import { fromEntries } from './from-entries';
 import { HTTPError } from './http-error';
 import type { Netter, NetterOptions, NetterResponse, NetterSignature } from './types';
 
@@ -32,7 +31,10 @@ export function createNetter(method?: (typeof methods)[number]): NetterSignature
 
 const netter: Netter = Object.assign(
     createNetter(),
-    fromEntries(methods.map((method) => [method, createNetter(method)])),
+    Object.fromEntries(methods.map((method) => [method, createNetter(method)])) as Record<
+        (typeof methods)[number],
+        NetterSignature
+    >,
 );
 
 export { netter, netter as net };
