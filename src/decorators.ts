@@ -1,20 +1,20 @@
 import type { NetterOptions, NetterPromise, NetterResponse } from './types';
 
-export function decoratePromise<TOutput = unknown>(
-    promise: Promise<NetterResponse<TOutput>>,
-): NetterPromise<TOutput> {
+export function decoratePromise<TShape = unknown>(
+    promise: Promise<NetterResponse<TShape>>,
+): NetterPromise<TShape> {
     return Object.assign(promise, {
         json: async () => await (await promise).json(),
         text: async () => await (await promise).text(),
         blob: async () => await (await promise).blob(),
-    }) as NetterPromise<TOutput>;
+    }) as NetterPromise<TShape>;
 }
 
-export function decorateResponse<TOutput = unknown>(
+export function decorateResponse<TShape = unknown>(
     response: Response,
     request: Request,
-    options: NetterOptions<TOutput>,
-): NetterResponse<TOutput> {
+    options: NetterOptions<TShape>,
+): NetterResponse<TShape> {
     const parsers = {
         // necessary because of the later 'json' access we do to the response
         json: response.json.bind(response),
@@ -27,5 +27,5 @@ export function decorateResponse<TOutput = unknown>(
             }
             return await parsers.json();
         },
-    }) as NetterResponse<TOutput>;
+    }) as NetterResponse<TShape>;
 }

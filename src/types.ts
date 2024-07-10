@@ -2,33 +2,33 @@ import type { methods } from './constants';
 
 export type Prettify<T> = { [Key in keyof T]: T[Key] };
 
-export type Parser<TOutput = unknown> = (
+export type Parser<TShape = unknown> = (
     input: unknown,
     context: { response: Response; request: Request },
-) => TOutput | Promise<TOutput>;
+) => TShape | Promise<TShape>;
 
-export type NetterOptions<TOutput = unknown> = Prettify<
+export type NetterOptions<TShape = unknown> = Prettify<
     {
         throwHttpErrors?: boolean;
         json?: unknown;
-        parse?: Parser<TOutput>;
+        parse?: Parser<TShape>;
     } & RequestInit
 >;
 
-export type NetterResponse<TOutput = unknown> = Omit<Response, 'json'> & {
-    readonly json: <T = TOutput>() => Promise<T>;
+export type NetterResponse<TShape = unknown> = Omit<Response, 'json'> & {
+    readonly json: <T = TShape>() => Promise<T>;
 };
 
-export type NetterPromise<TOutput = unknown> = Promise<NetterResponse<TOutput>> & {
-    readonly json: <T = TOutput>() => Promise<T>;
+export type NetterPromise<TShape = unknown> = Promise<NetterResponse<TShape>> & {
+    readonly json: <T = TShape>() => Promise<T>;
     readonly text: () => Promise<string>;
     readonly blob: () => Promise<Blob>;
 };
 
-export type NetterSignature = <TOutput = unknown>(
+export type NetterSignature = <TShape = unknown>(
     url: URL | string,
-    options?: NetterOptions<TOutput>,
-) => NetterPromise<TOutput>;
+    options?: NetterOptions<TShape>,
+) => NetterPromise<TShape>;
 
 export type Netter = NetterSignature & {
     [Method in (typeof methods)[number]]: NetterSignature;
