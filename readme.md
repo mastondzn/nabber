@@ -13,9 +13,15 @@ pnpm add netter
 ```typescript
 import { netter } from 'netter';
 
-await netter.post('https://jsonplaceholder.typicode.com/posts', {
+const response = await netter.post('https://jsonplaceholder.typicode.com/posts', {
     json: { title: 'foo', body: 'bar', userId: 1 },
 });
 
-const data = await netter.get('https://jsonplaceholder.typicode.com/posts/1').json();
+const data = await netter('https://jsonplaceholder.typicode.com/posts/1').json();
+// typeof data is unknown
+
+const data = await netter('https://jsonplaceholder.typicode.com/posts/1', {
+    parse: (data) => z.object({ id: z.number() }).parse(data),
+}).json();
+// typeof data is now { id: number }!
 ```
