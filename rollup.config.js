@@ -12,9 +12,5 @@ export default defineConfig({
         preserveModules: true,
         ...output,
     })),
-    plugins: [
-        typescript({
-            exclude: ['./tests/**'],
-        }),
-    ],
+    plugins: [typescript({ exclude: ['./tests/**'] })],
 });

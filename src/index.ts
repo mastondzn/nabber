@@ -1,70 +1,41 @@
 import { methods } from './constants';
+import { decoratePromise, decorateResponse } from './decorators';
+import { fromEntries } from './from-entries';
 import { HTTPError } from './http-error';
-import type { NabberOptions } from './options';
-import type { TypedResponse } from './types';
+import type { Netter, NetterOptions, NetterResponse, NetterSignature } from './types';
 
-async function performFetch(
-    url: URL | string,
-    { throwHttpErrors, json, parse, ...options }: NabberOptions = {},
-) {
-    if (json) {
-        if (options.body) throw new TypeError('Cannot specify both json and body options');
-        if (typeof json !== 'object') throw new TypeError('"json" option must be an object');
-        options.body = JSON.stringify(json);
+async function performFetch(url: URL | string, options: NetterOptions): Promise<NetterResponse> {
+    if (options.json) {
+        if (options.body) {
+            throw new TypeError('Cannot specify both json and body options');
+        }
+        options.body = JSON.stringify(options.json);
     }
 
     const request = new Request(url, options);
     const response = await fetch(request);
 
-    if (throwHttpErrors && !response.ok) {
+    if (options.throwHttpErrors && !response.ok) {
         throw new HTTPError(request, response);
     }
 
-    if (parse) {
-        const parseJson = response.json.bind(response);
-        return Object.assign(response, {
-            json: async () => await parse(await parseJson(), { response, request }),
-        });
-    }
-
-    return response;
+    return decorateResponse(response, request, options);
 }
 
-function decoratePromise(promise: Promise<Response>) {
-    return Object.assign(promise, {
-        json: async () => await (await promise).json(),
-        text: async () => await (await promise).text(),
-        blob: async () => await (await promise).blob(),
-        arrayBuffer: async () => await (await promise).arrayBuffer(),
-    });
-}
-
-export type Nabber = <T = unknown>(
-    url: URL | string,
-    options?: NabberOptions & {
-        parse?: (
-            input: unknown,
-            context: { response: Response; request: Request },
-        ) => T | Promise<T>;
-    },
-) => Promise<TypedResponse<T>>;
-
-export const nabber = Object.assign(
-    (url: URL | string, options?: NabberOptions) => {
+export function createNetter(method?: (typeof methods)[number]): NetterSignature {
+    return (url, options = {}) => {
+        options = Object.assign(options, { method: options.method ?? method });
         const promise = performFetch(url, options);
-        return decoratePromise(promise);
-    },
-    Object.fromEntries(
-        methods.map((method) => [
-            method,
-            (url: URL | string, options?: NabberOptions) => {
-                const promise = performFetch(url, { method: method.toUpperCase(), ...options });
-                return decoratePromise(promise);
-            },
-        ]),
-    ),
-) as unknown as Nabber & { [Method in (typeof methods)[number]]: Nabber };
+        return decoratePromise(promise, options);
+    };
+}
 
+const netter: Netter = Object.assign(
+    createNetter(),
+    fromEntries(methods.map((method) => [method, createNetter(method)])),
+);
+
+export { netter, netter as net };
 export { HTTPError } from './http-error';
-export type { NabberOptions } from './options';
-export type { TypedResponse } from './types';
+export type { NetterResponse, NetterOptions, NetterPromise, NetterSignature } from './types';
+export { methods } from './constants';
