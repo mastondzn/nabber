@@ -10,6 +10,10 @@ export const handlers: RequestHandler[] = [
     http.get('https://example.com/json', () => json({ data: 'foo' })),
     http.get('https://example.com/text', () => text('foo')),
     http.all('https://example.com/method', ({ request }) => text(request.method)),
+    http.get('https://example.com/one-second', async () => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return json({ data: 'foo' });
+    }),
 ];
 
 const server = setupServer(...handlers);
