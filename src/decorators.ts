@@ -2,7 +2,6 @@ import type { NetterOptions, NetterPromise, NetterResponse } from './types';
 
 export function decoratePromise<TOutput = unknown>(
     promise: Promise<NetterResponse<TOutput>>,
-    options: NetterOptions<TOutput>,
 ): NetterPromise<TOutput> {
     return Object.assign(promise, {
         json: async () => await (await promise).json(),

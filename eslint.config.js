@@ -10,5 +10,7 @@ export default defineConfig({
 
     rules: {
         'unicorn/prevent-abbreviations': 'off',
+        'unused-imports/no-unused-imports': 'off',
+        'unused-imports/no-unused-vars': 'off',
     },
 });

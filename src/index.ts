@@ -26,7 +26,7 @@ export function createNetter(method?: (typeof methods)[number]): NetterSignature
     return (url, options = {}) => {
         options = Object.assign(options, { method: options.method ?? method });
         const promise = performFetch(url, options);
-        return decoratePromise(promise, options);
+        return decoratePromise(promise);
     };
 }
 
