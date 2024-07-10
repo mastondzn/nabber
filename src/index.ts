@@ -23,7 +23,7 @@ async function performFetch(url: URL | string, options: NetterOptions): Promise<
 
 export function createNetter(method?: (typeof methods)[number]): NetterSignature {
     return (url, options = {}) => {
-        options = Object.assign(options, { method: options.method ?? method });
+        options = Object.assign(options, { method: options.method ?? method?.toUpperCase() });
         const promise = performFetch(url, options);
         return decoratePromise(promise);
     };
